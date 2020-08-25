@@ -78,7 +78,7 @@ class start_threads:
 # function to save files
 
 #Crawler
-def crawler:
+def crawler():
     while 1:
         # crawl for not crawled links
         not_crawled_links = list(collection.find({"is_crawled":False}))

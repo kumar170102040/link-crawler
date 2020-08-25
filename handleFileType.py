@@ -1,8 +1,8 @@
-from crawlerUtils import write_to_file
-from crawlerUtils import update_collection
-from crawlerUtils import generate_random_string
-from crawlerUtils import update_collection_old
-from crawlerUtils import create_new_link
+from crawler_utils import write_to_file
+from crawler_utils import update_collection
+from crawler_utils import generate_random_string
+from crawler_utils import update_collection_old
+from crawler_utils import create_new_link
 from bs4 import BeautifulSoup
 
 def handle_applications(content_type):

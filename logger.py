@@ -1,7 +1,6 @@
 import logging
 import logging.handlers
 
-
 def get_log_level(num):
     if num == 0:
         return logging.DEBUG
