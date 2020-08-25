@@ -2,7 +2,8 @@ import requests
 import string
 import random
 from datetime import datetime
-from
+from handleFileType import handle_html
+from handleFileType import other_content_types
 import time
 
 def write_to_file(file_name,html_text):

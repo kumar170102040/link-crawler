@@ -1,6 +1,8 @@
 from crawlerUtils import write_to_file
 from crawlerUtils import update_collection
-import generate_random_string
+from crawlerUtils import generate_random_string
+from crawlerUtils import update_collection_old
+from crawlerUtils import create_new_link
 from bs4 import BeautifulSoup
 
 def handle_applications(content_type):
@@ -140,23 +142,23 @@ def other_content_types(url, collection, http_status, content_length, content_ty
 
     # if it is application
     if content_type[:11] == "application":
-        file_name = handel_applications(content_type)
+        file_name = handle_applications(content_type)
 
     # if content type is audio
     elif content_type[:5] == "audio":
-        file_name = handel_audio(content_type)
+        file_name = handle_audio(content_type)
 
     # if content type is text
     elif content_type[:4] == "text":
-        file_name = handel_text(content_type)
+        file_name = handle_text(content_type)
 
     # if content type is image
     elif content_type[:5] == "image":
-        file_name = handel_image(content_type)
+        file_name = handle_image(content_type)
 
     # if content type is video
     elif content_type[:5] == "video":
-        file_name = handel_video(content_type)
+        file_name = handle_video(content_type)
 
     if file_name != None:
         file_name = write_to_file(file_name, html_text)

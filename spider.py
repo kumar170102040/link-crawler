@@ -1,12 +1,10 @@
-import requests
-import string
-import random
 import time
 import threading
 from bs4 import BeautifulSoup
 from datetime import datetime
 from logger import logger
 from cfg import config
+from crawlerUtils import crawl_data
 
 from pymongo import MongoClient
 
