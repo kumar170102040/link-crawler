@@ -5,6 +5,7 @@ from crawler_utils import update_collection_old
 from crawler_utils import create_new_link
 from bs4 import BeautifulSoup
 
+# handle 'Application' content type
 def handle_applications(content_type):
     file_name = generate_random_string()
     if content_type[11:] == "/pdf":
@@ -47,7 +48,7 @@ def handle_applications(content_type):
     return file_name
 
 
-# handel content type of audio
+# handle 'Audio' content type
 def handle_audio(content_type):
     file_name = generate_random_string()
     if content_type[5:] == "/acc":
@@ -69,7 +70,7 @@ def handle_audio(content_type):
     return file_name
 
 
-# handel content type of text
+# handle 'Text' content type
 def handle_text(content_type):
     file_name = generate_random_string()
     if content_type[4:] == "/plain":
@@ -90,7 +91,7 @@ def handle_text(content_type):
     return file_name
 
 
-# handel content of type image
+# handle 'Image' content type
 def handle_image(content_type):
     file_name = generate_random_string()
     if content_type[5:] == "/vnd.microsoft.icon":
@@ -114,7 +115,7 @@ def handle_image(content_type):
     return file_name
 
 
-# handel videos
+# handle 'Video' content type
 def handle_video(content_type):
     file_name = generate_random_string()
     if content_type[5:] == "/x-msvideo":
@@ -135,42 +136,7 @@ def handle_video(content_type):
         file_name = None
     return file_name
 
-
-# hadel types other than html
-def other_content_types(url, collection, http_status, content_length, content_type, html_text, new=True):
-    file_name = None
-
-    # if it is application
-    if content_type[:11] == "application":
-        file_name = handle_applications(content_type)
-
-    # if content type is audio
-    elif content_type[:5] == "audio":
-        file_name = handle_audio(content_type)
-
-    # if content type is text
-    elif content_type[:4] == "text":
-        file_name = handle_text(content_type)
-
-    # if content type is image
-    elif content_type[:5] == "image":
-        file_name = handle_image(content_type)
-
-    # if content type is video
-    elif content_type[:5] == "video":
-        file_name = handle_video(content_type)
-
-    if file_name != None:
-        file_name = write_to_file(file_name, html_text)
-        # for updating not crawled data new is true and for crawling old data new is false
-        if new:
-            update_collection(url=url, http_status=http_status, content_length=content_length,
-                              content_type=content_type, file_name=file_name, collection=collection)
-        else:
-            update_collection_old(url=url, http_status=http_status, content_length=content_length,
-                                  content_type=content_type, file_name=file_name, collection=collection)
-
-# handel html
+# handle 'HTMl' content type
 def handle_html(url, html_text, http_status, collection, content_type, content_length, new=True):
     soup = BeautifulSoup(html_text, 'html.parser')
     a_tags = soup.find_all("a")
@@ -206,3 +172,39 @@ def handle_html(url, html_text, http_status, collection, content_type, content_l
     else:
         update_collection_old(url=url, http_status=http_status, content_length=content_length,
                               content_type=content_type, file_name=file_name, collection=collection)
+
+# handle other content types
+def other_content_types(url, collection, http_status, content_length, content_type, html_text, new=True):
+    file_name = None
+
+    # if it is application
+    if content_type[:11] == "application":
+        file_name = handle_applications(content_type)
+
+    # if content type is audio
+    elif content_type[:5] == "audio":
+        file_name = handle_audio(content_type)
+
+    # if content type is text
+    elif content_type[:4] == "text":
+        file_name = handle_text(content_type)
+
+    # if content type is image
+    elif content_type[:5] == "image":
+        file_name = handle_image(content_type)
+
+    # if content type is video
+    elif content_type[:5] == "video":
+        file_name = handle_video(content_type)
+
+    if file_name != None:
+        file_name = write_to_file(file_name, html_text)
+        # for updating not crawled data new is true and for crawling old data new is false
+        if new:
+            update_collection(url=url, http_status=http_status, content_length=content_length,
+                              content_type=content_type, file_name=file_name, collection=collection)
+        else:
+            update_collection_old(url=url, http_status=http_status, content_length=content_length,
+                                  content_type=content_type, file_name=file_name, collection=collection)
+
+

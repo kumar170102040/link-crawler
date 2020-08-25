@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from logger import logger
 from cfg import config
-from crawlerUtils import crawl_data
+from crawler_utils import crawl_data
 
 from pymongo import MongoClient
 
@@ -74,10 +74,7 @@ class start_threads:
                 return True
             return False
 
-
-# function to save files
-
-#Crawler
+#Crawler Function
 def crawler():
     while 1:
         # crawl for not crawled links
@@ -86,8 +83,9 @@ def crawler():
         len_of_data = len(not_crawled_links)
         if len_of_data<5:
             crawl_data(not_crawled_links,DELAY_TIME,CRAWL_AFTER,MAX_DATA_LIMIT,collection)
-        # multithread work
+
         else :
+            # multithread work
             mythread= start_threads(data_list=not_crawled_links,collection=collection,DELAY_TIME=DELAY_TIME,CRAWL_AFTER=CRAWL_AFTER,MAX_DATA_LIMIT=MAX_DATA_LIMIT,NO_OF_THREADS=5)
             mythread.start()
             # wait until all theads are completed
