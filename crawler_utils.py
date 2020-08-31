@@ -1,8 +1,6 @@
-import requests
 import string
 import random
 from datetime import datetime
-import time
 
 #Creting an HTMl file with a random file name
 def write_to_file(file_name,html_text):
