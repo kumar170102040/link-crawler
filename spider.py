@@ -81,10 +81,12 @@ def crawl_data(data_list,DELAY_TIME,CRAWL_AFTER,MAX_DATA_LIMIT,collection,new=Tr
     for data in data_list:
         url=data['link']
         try:
+            logger.debug("Making HTTP GET request: " + url)
             resp=requests.get(url)
             # obtain data
             html_text = resp.text
             http_status = resp.status_code
+            logger.debug("Got HTML text and source code = " + str(http_status))
             headers = resp.headers
 
             # if http status is grater than 400 implies client side error or server side error
@@ -113,7 +115,7 @@ def crawl_data(data_list,DELAY_TIME,CRAWL_AFTER,MAX_DATA_LIMIT,collection,new=Tr
             else:
                 other_content_types(url, collection, http_status, content_length, content_type, html_text)
             time.sleep(DELAY_TIME)
-
+            logger.debug("Handled the content type of the fetched response : " + content_type)
         # network error then marked as crawled and crawl after 24 hr
         except (requests.ConnectionError ,requests.ConnectTimeout ,requests.HTTPError):
             # if new then update with changing created at from none to current date
@@ -127,7 +129,7 @@ def crawl_data(data_list,DELAY_TIME,CRAWL_AFTER,MAX_DATA_LIMIT,collection,new=Tr
 
         # if data limit exceed
         if collection.count_documents({})>MAX_DATA_LIMIT:
-            print("Maximumm Links Limit Exceeded")
+            logger.debug("Crawling paused as the Maximum links limit is reached")
             return
 
 #Crawler
@@ -147,7 +149,7 @@ while 1:
             time.sleep(1)  # wait for one second and check again if threads are complete
 
     if collection.count_documents({})>MAX_DATA_LIMIT:
-        print("Maximum Links Limit Exceeded")
+        logger.debug("Crawling paused as the Maximum links limit is reached")
         while collection.count_documents({})>MAX_DATA_LIMIT:
             time.sleep(10)  # wait for 10 sec in expecting data was cleaned by user
 
@@ -163,7 +165,6 @@ while 1:
         while mythread.is_not_complete():
             time.sleep(1)  # wait for one second and check again if threads are complete
     if collection.count_documents({})>MAX_DATA_LIMIT:
-        print("Maximum Links Limit Exceeded")
+        logger.debug("Crawling paused as the Maximum links limit is reached")
         while collection.count_documents({})>MAX_DATA_LIMIT:
             time.sleep(10)  # wait for 10 sec in expecting data was cleaned by user
-
