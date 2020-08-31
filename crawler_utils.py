@@ -1,11 +1,12 @@
 import string
 import random
 from datetime import datetime
+from cfg import config
 
 #Creting an HTMl file with a random file name
 def write_to_file(file_name,html_text):
     try:
-        with open("html_files/"+file_name,"wb") as f:
+        with open(config['FILE_PATH'] +file_name,"wb") as f:
             f.write(html_text)
     except UnicodeEncodeError:
         file_name=None

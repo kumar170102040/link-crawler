@@ -1,26 +1,27 @@
 import requests
 import time
 import threading
-from datetime import datetime
 from logger import logger
 from crawler_utils import *
 from handleFileType import *
+from cfg import config
+
 from pymongo import MongoClient
 
 #CONSTANTS
 MAX_DATA_LIMIT=5000
 CRAWL_AFTER=datetime(2020,8,23)-datetime(2020,8,22)
 DELAY_TIME=5
-ROOT_URL="https://flinkhub.com/"
+ROOT_URL= config['ROOT_URL']
 
 #Connecting to MongoDB
-cluster=MongoClient(port=27017)
-db=cluster['web_crawler']
+cluster=MongoClient(port = config['PORT'])
+db=cluster[config['COLLECTION_NAME']]
 
 # if webcrawler already present then drop(helpful during testing)
 db.webcrawler.drop()
 
-collection=db['web_crawler']
+collection=db[config['COLLECTION_NAME']]
 
 #Adding Root URL to the MongoDB
 root_data={"link":ROOT_URL,
@@ -103,12 +104,12 @@ def crawl_data(data_list,DELAY_TIME,CRAWL_AFTER,MAX_DATA_LIMIT,collection,new=Tr
 
             content_type = headers['content-type'].split(";")
             content_type = content_type[0]
-            # setting html to content for easy wirting without errors
+            # setting html to content for easy writing without errors
             html_text = resp.content
-            # if responce is html then crawl as only html contains links
+            # if response is html then crawl as only html contains links
             if content_type == "text/html":
                 handle_html(url, html_text, http_status, collection, content_type, content_length, new)
-            # if responce is not html then call other content type
+            # if response is not html then call other content type
             else:
                 other_content_types(url, collection, http_status, content_length, content_type, html_text)
             time.sleep(DELAY_TIME)
@@ -165,3 +166,4 @@ while 1:
         print("Maximum Links Limit Exceeded")
         while collection.count_documents({})>MAX_DATA_LIMIT:
             time.sleep(10)  # wait for 10 sec in expecting data was cleaned by user
+
